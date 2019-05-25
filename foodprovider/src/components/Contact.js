@@ -16,7 +16,7 @@ const Contact = (props) => {
         </p>
         </View>
     </div>
-    );
+    )
 };
 
 const styles = {
