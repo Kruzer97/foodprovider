@@ -1,5 +1,6 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
+import Location from "../images/Lokalizacja.jpg";
 
 const Contact = props => {
   const { phoneNumberText, phoneNumberContainer, openHoursDayText, paperStyle } = styles;
@@ -41,7 +42,7 @@ const Contact = props => {
         </p>
       </Paper>
       <Paper>
-        <img src="{require('../images/Lokalizacja.jpg')}" />
+        <img src={Location} />
       </Paper>
     </div>
   );
