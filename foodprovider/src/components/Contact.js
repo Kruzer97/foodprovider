@@ -2,25 +2,15 @@ import React from "react";
 import Paper from "@material-ui/core/Paper";
 
 const Contact = props => {
-  const { phoneNumberText, phoneNumberContainer, openHoursDayText } = styles;
+  const { phoneNumberText, phoneNumberContainer, openHoursDayText, paperStyle } = styles;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
       <div style={phoneNumberContainer}>
         <p style={phoneNumberText}>tel. 606 606 606</p>
       </div>
-      <Paper
-        style={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          marginTop: 20,
-          padding: 25,
-          width: 300,
-          alignSelf: "center"
-        }}
-      >
-        <p style={{}}>Lokal otwarty w godzinach:</p>
+      <Paper style={paperStyle}>
+        <p style={{ fontWeight: "bold" }}>Lokal otwarty w godzinach:</p>
         <p style={openHoursDayText}>
           <span>poniedziałek:</span>
           <span>8:00 - 20:00</span>
@@ -50,6 +40,9 @@ const Contact = props => {
           <span> nieczynne</span>
         </p>
       </Paper>
+      <Paper>
+        <img src="{require('../images/Lokalizacja.jpg')}" />
+      </Paper>
     </div>
   );
 };
@@ -74,6 +67,15 @@ const styles = {
     flexDirection: "row",
     justifyContent: "space-between",
     width: 250
+  },
+  paperStyle: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    marginTop: 200,
+    padding: 25,
+    width: 500,
+    alignSelf: "center"
   }
 };
 
