@@ -41,7 +41,7 @@ const Contact = props => {
           <span> nieczynne</span>
         </p>
         <p>
-          <img src={Location} />
+          <img alt="lokalizacja" src={Location} />
         </p>
       </Paper>
     </div>
