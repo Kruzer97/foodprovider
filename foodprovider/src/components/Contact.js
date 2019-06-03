@@ -40,9 +40,9 @@ const Contact = props => {
           <span>niedziela:</span>
           <span> nieczynne</span>
         </p>
-      </Paper>
-      <Paper>
-        <img src={Location} />
+        <p>
+          <img src={Location} />
+        </p>
       </Paper>
     </div>
   );
@@ -73,7 +73,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
-    marginTop: 200,
+    marginTop: 50,
     padding: 25,
     width: 500,
     alignSelf: "center"

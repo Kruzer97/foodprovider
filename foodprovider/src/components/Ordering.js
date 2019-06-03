@@ -1,8 +1,16 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
+import Divider from "@material-ui/core/Divider";
 
 const Contact = props => {
-  const { orderBarContainer, orderBarText, paperStyle } = styles;
+  const {
+    orderBarContainer,
+    orderBarText,
+    paperStyle,
+    componentsStyle,
+    ulStyle,
+    dividerStyle
+  } = styles;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
@@ -14,8 +22,23 @@ const Contact = props => {
         <p style={{ fontWeight: "bold", color: "gold" }}>
           <span>Pizza z 3-ema składnikami:</span>
         </p>
-        <p>szynka</p>
+        <Divider styles={dividerStyle} />
+        <ul style={ulStyle}>
+          <li>
+            <p style={componentsStyle}>Szynka</p>
+          </li>
+          <li>
+            <p style={componentsStyle}>Pieczarki</p>
+          </li>
+          <li>
+            <p style={componentsStyle}>Papryka</p>
+          </li>
+          <li>
+            <p style={componentsStyle}>Grubsze ciasto</p>
+          </li>
+        </ul>
       </Paper>
+      <Divider />
     </div>
   );
 };
@@ -44,6 +67,29 @@ const styles = {
     padding: 25,
     width: 500,
     alignSelf: "center"
+  },
+  componentsStyle: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "column",
+    margin: 4
+  },
+  ulStyle: {
+    display: "block",
+    listStyleType: "circle",
+    margiTop: 0,
+    marginBottom: 10,
+    marginLeft: 1,
+    marginRight: 1,
+    paddingLeft: 20
+  },
+  dividerStyle: {
+    position: "relative",
+    minWidth: 2,
+    maxWidth: 2,
+    backgroundColor: "black",
+    display: "block",
+    margin: 0
   }
 };
 
