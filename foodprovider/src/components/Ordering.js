@@ -1,6 +1,8 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Divider from "@material-ui/core/Divider";
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 
 const Contact = props => {
   const {
@@ -11,6 +13,15 @@ const Contact = props => {
     ulStyle,
     dividerStyle
   } = styles;
+
+  const useStyles = makeStyles(theme => ({
+    button: {
+      margin: theme.spacing(1)
+    },
+    input: {
+      display: "none"
+    }
+  }));
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
@@ -36,6 +47,10 @@ const Contact = props => {
           <li>
             <p style={componentsStyle}>Grubsze ciasto</p>
           </li>
+          <p style={{ fontWeight: "bold", color: "red" }}>Koszt dostawy: 2zł</p>
+          <p>Koszt składników pizzy: 25zł</p>
+          <p>Koszty dodatkowe: 2,50zł(grubsze ciasto)</p>
+          <p style={{ fontWeight: "bold" }}>SUMA: 29,50zł</p>
         </ul>
       </Paper>
       <Divider />
