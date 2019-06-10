@@ -6,8 +6,9 @@ import * as serviceWorker from "./serviceWorker";
 import Contact from "./components/Contact";
 import Ordering from "./components/Ordering";
 import Main from "./components/Main";
+import Order from "./components/Order";
 
-ReactDOM.render(<Main />, document.getElementById("root"));
+ReactDOM.render(<Order />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

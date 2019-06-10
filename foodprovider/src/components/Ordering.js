@@ -15,7 +15,7 @@ const Contact = props => {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
       <div style={orderBarContainer}>
-        <p style={orderBarText}>Podsumowanie zamówienia</p>
+        <p style={orderBarText}>Podsumowanie</p>
       </div>
       <Paper style={paperStyle}>
         <p style={{ fontWeight: "bold" }}>Twoje zamówienie:</p>
@@ -52,7 +52,7 @@ const Contact = props => {
 
 const styles = {
   orderBarContainer: {
-    backgroundColor: "gold",
+    backgroundColor: "#3f51b5",
     justifyContent: "center",
     alignItems: "center",
     height: 60,
@@ -63,7 +63,7 @@ const styles = {
 
   orderBarText: {
     fontSize: 50,
-    color: "black"
+    color: "red"
   },
 
   paperStyle: {

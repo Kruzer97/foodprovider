@@ -50,7 +50,7 @@ const Contact = props => {
 
 const styles = {
   phoneNumberContainer: {
-    backgroundColor: "gold",
+    backgroundColor: "#3f51b5",
     justifyContent: "center",
     alignItems: "center",
     height: 60,
