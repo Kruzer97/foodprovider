@@ -8,6 +8,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Switch from "@material-ui/core/Switch";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -25,234 +28,195 @@ const useStyles = makeStyles(theme => ({
 
 export default function SimpleSelect() {
   const classes = useStyles();
-  const [values, setValues] = React.useState({
-    age: "",
-    name: "hai"
+  const [sizes, setSizes] = React.useState([
+    {
+      id: 1,
+      name: "mała",
+      size: 26,
+      price: 0
+    },
+    {
+      id: 2,
+      name: "średnia",
+      size: 32,
+      price: 5
+    },
+    {
+      id: 3,
+      name: "duża",
+      size: 42,
+      price: 10
+    }
+  ]);
+  const [selectedSize, setSelectedSize] = React.useState({
+    id: 2,
+    name: "średnia",
+    size: 32,
+    price: 5
   });
+  const [ingredients, setIngredients] = React.useState([
+    {
+      id: 1,
+      name: "salami",
+      price: 1.5
+    },
+    {
+      id: 2,
+      name: "ser",
+      price: 1
+    },
+    {
+      id: 3,
+      name: "boczek",
+      price: 2.5
+    },
+    {
+      id: 4,
+      name: "pomidor",
+      price: 0.5
+    },
+    {
+      id: 5,
+      name: "pieczarki",
+      price: 0.5
+    }
+  ]);
+  const [firstIngredient, setFirstIngredient] = React.useState([]);
+  const [secondIngredient, setSecondIngredient] = React.useState([]);
+  const [thirdIngredient, setThirdIngredient] = React.useState([]);
+  const [isThick, setIsThick] = React.useState(false);
 
-  const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
-  React.useEffect(() => {
-    setLabelWidth(inputLabel.current.offsetWidth);
-  }, []);
-
-  function handleChange(event) {
-    setValues(oldValues => ({
-      ...oldValues,
-      [event.target.name]: event.target.value
-    }));
-  }
-
+  const onThicknessChangeHandler = () => {
+    setIsThick(!isThick);
+    console.log(isThick);
+  };
+  const handleChange = (event, ingredientOrder) => {
+    switch (ingredientOrder) {
+      case 1:
+        setFirstIngredient(ingredients.find(item => item.id == event.target.value));
+        break;
+      case 2:
+        setSecondIngredient(ingredients.find(item => item.id == event.target.value));
+        break;
+      case 3:
+        setThirdIngredient(ingredients.find(item => item.id == event.target.value));
+        break;
+    }
+  };
+  const handleSizeChange = event => {
+    setSelectedSize(sizes.find(item => item.id == event.target.value));
+  };
+  const getOrderPrice = () => {
+    var firstIngredientPrice = firstIngredient.price === undefined ? 0 : firstIngredient.price;
+    var secondIngredientPrice = secondIngredient.price === undefined ? 0 : secondIngredient.price;
+    var thirdIngredientPrice = thirdIngredient.price === undefined ? 0 : thirdIngredient.price;
+    return (
+      selectedSize.price +
+      (isThick ? 10 : 0) +
+      firstIngredientPrice +
+      secondIngredientPrice +
+      thirdIngredientPrice
+    );
+  };
   return (
-    <form className={classes.root} autoComplete="off">
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="age-simple">Age</InputLabel>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          inputProps={{
-            name: "age",
-            id: "age-simple"
-          }}
+    <div style={{ margin: "auto", display: "flex", flexDirection: "column" }}>
+      <Paper style={{ width: 500, display: "flex", alignItems: "center", alignSelf: "center" }}>
+        <form
+          className={classes.root}
+          autoComplete="off"
+          style={{ display: "flex", flexDirection: "column", width: 250, alignItems: "center" }}
         >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="age-helper">Age</InputLabel>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          input={<Input name="age" id="age-helper" />}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Some important helper text</FormHelperText>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          displayEmpty
-          name="age"
-          className={classes.selectEmpty}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Without label</FormHelperText>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel shrink htmlFor="age-label-placeholder">
-          Age
-        </InputLabel>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          input={<Input name="age" id="age-label-placeholder" />}
-          displayEmpty
-          name="age"
-          className={classes.selectEmpty}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Label + placeholder</FormHelperText>
-      </FormControl>
-      <FormControl className={classes.formControl} disabled>
-        <InputLabel htmlFor="name-disabled">Name</InputLabel>
-        <Select
-          value={values.name}
-          onChange={handleChange}
-          input={<Input name="name" id="name-disabled" />}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="hai">Hai</MenuItem>
-          <MenuItem value="olivier">Olivier</MenuItem>
-          <MenuItem value="kevin">Kevin</MenuItem>
-        </Select>
-        <FormHelperText>Disabled</FormHelperText>
-      </FormControl>
-      <FormControl className={classes.formControl} error>
-        <InputLabel htmlFor="name-error">Name</InputLabel>
-        <Select
-          value={values.name}
-          onChange={handleChange}
-          name="name"
-          renderValue={value => `⚠️  - ${value}`}
-          input={<Input id="name-error" />}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="hai">Hai</MenuItem>
-          <MenuItem value="olivier">Olivier</MenuItem>
-          <MenuItem value="kevin">Kevin</MenuItem>
-        </Select>
-        <FormHelperText>Error</FormHelperText>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="name-readonly">Name</InputLabel>
-        <Select
-          value={values.name}
-          onChange={handleChange}
-          input={<Input name="name" id="name-readonly" readOnly />}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value="hai">Hai</MenuItem>
-          <MenuItem value="olivier">Olivier</MenuItem>
-          <MenuItem value="kevin">Kevin</MenuItem>
-        </Select>
-        <FormHelperText>Read only</FormHelperText>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor="age-auto-width">Age</InputLabel>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          input={<Input name="age" id="age-auto-width" />}
-          autoWidth
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Auto width</FormHelperText>
-      </FormControl>
-      <FormControl className={classes.formControl}>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          name="age"
-          displayEmpty
-          className={classes.selectEmpty}
-        >
-          <MenuItem value="" disabled>
-            Placeholder
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Placeholder</FormHelperText>
-      </FormControl>
-      <FormControl required className={classes.formControl}>
-        <InputLabel htmlFor="age-required">Age</InputLabel>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          name="age"
-          inputProps={{
-            id: "age-required"
-          }}
-          className={classes.selectEmpty}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Required</FormHelperText>
-      </FormControl>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel ref={inputLabel} htmlFor="outlined-age-simple">
-          Age
-        </InputLabel>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          input={<OutlinedInput labelWidth={labelWidth} name="age" id="outlined-age-simple" />}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-      <FormControl variant="filled" className={classes.formControl}>
-        <InputLabel htmlFor="filled-age-simple">Age</InputLabel>
-        <Select
-          value={values.age}
-          onChange={handleChange}
-          input={<FilledInput name="age" id="filled-age-simple" />}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl>
-    </form>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="size-simple">Rozmiar</InputLabel>
+            <Select
+              value={selectedSize.id}
+              onChange={event => handleSizeChange(event)}
+              inputProps={{
+                name: "size",
+                id: "size-simple"
+              }}
+            >
+              {sizes.map(item => {
+                return (
+                  <MenuItem value={item.id} key={item.id}>
+                    {item.name}({item.size} cm)
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <FormControlLabel
+              value="top"
+              control={<Switch color="primary" />}
+              label="Grube ciasto?"
+              labelPlacement="start"
+              onChange={onThicknessChangeHandler}
+              checked={isThick}
+            />
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="ingredient-simple">Składnik 1</InputLabel>
+            <Select
+              value={firstIngredient.id}
+              onChange={event => handleChange(event, 1)}
+              inputProps={{
+                name: "ingredient",
+                id: "ingredient-simple"
+              }}
+            >
+              {ingredients.map(item => {
+                return (
+                  <MenuItem value={item.id} key={item.id}>
+                    {item.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="ingredient-simple">Składnik 2</InputLabel>
+            <Select
+              value={secondIngredient.id}
+              onChange={event => handleChange(event, 2)}
+              inputProps={{
+                name: "ingredient",
+                id: "ingredient-simple"
+              }}
+            >
+              {ingredients.map(item => {
+                return (
+                  <MenuItem value={item.id} key={item.id}>
+                    {item.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="ingredient-simple">Składnik 3</InputLabel>
+            <Select
+              value={thirdIngredient.id}
+              onChange={event => handleChange(event, 3)}
+              inputProps={{
+                name: "ingredient",
+                id: "ingredient-simple"
+              }}
+            >
+              {ingredients.map(item => {
+                return (
+                  <MenuItem value={item.id} key={item.id}>
+                    {item.name}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </FormControl>
+        </form>
+        <div>
+          <p>Wartość zamówienia: {getOrderPrice()}</p>
+        </div>
+      </Paper>
+    </div>
   );
 }
