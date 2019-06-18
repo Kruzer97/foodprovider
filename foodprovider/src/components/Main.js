@@ -19,6 +19,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Ordering from "./Ordering";
 import Contact from "./Contact";
+import Home from "./Home";
 
 const drawerWidth = 240;
 
@@ -68,7 +69,7 @@ function Main(props) {
   const renderPage = () => {
     switch (currentPageName) {
       case "Home":
-        return <Ordering />;
+        return <Home />;
 
       case "Ordering":
         return <Ordering />;
