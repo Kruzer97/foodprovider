@@ -7,6 +7,7 @@ import Contact from "./components/Contact";
 import Ordering from "./components/Ordering";
 import Main from "./components/Main";
 import Order from "./components/Order";
+import Home from "./components/Home";
 
 ReactDOM.render(<Main />, document.getElementById("root"));
 

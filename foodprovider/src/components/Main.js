@@ -20,6 +20,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Ordering from "./Ordering";
 import Order from "./Order";
 import Contact from "./Contact";
+import Home from "./Home";
 
 const drawerWidth = 240;
 
@@ -69,7 +70,7 @@ function Main(props) {
   const renderPage = () => {
     switch (currentPageName) {
       case "Home":
-        return <Ordering />;
+        return <Home />;
 
       case "Ordering":
         return <Order />;
