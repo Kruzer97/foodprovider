@@ -86,6 +86,10 @@ function Main(props) {
     setCurrentPageName("Ordering");
     setPageTitle("Zamów");
   };
+  const openHomeHandler = () => {
+    setCurrentPageName("Home");
+    setPageTitle("Home");
+  };
 
   const drawer = (
     <div>
@@ -96,7 +100,7 @@ function Main(props) {
           <ListItem button key={text}>
             <ListItemIcon>{index % 2 === 0 ? <HomeIcon /> : <OrderIcon />}</ListItemIcon>
             <ListItemText
-              onClick={index === 0 ? openContactHandler : openOrderingHandler}
+              onClick={index === 0 ? openHomeHandler : openOrderingHandler}
               primary={text}
             />
           </ListItem>

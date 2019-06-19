@@ -33,10 +33,12 @@ const Home = props => {
 const styles = {
   mainText: {
     fontSize: 50,
-    color: "red",
+    color: "#3f51b5",
     display: "flex",
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
+    marginTop: 30,
+    marginBottom: 15
   },
   paperStyle: {
     display: "flex",
