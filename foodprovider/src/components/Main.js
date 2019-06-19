@@ -18,6 +18,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Ordering from "./Ordering";
+import Order from "./Order";
 import Contact from "./Contact";
 import Home from "./Home";
 
@@ -72,7 +73,7 @@ function Main(props) {
         return <Home />;
 
       case "Ordering":
-        return <Ordering />;
+        return <Order />;
 
       case "Contact":
         return <Contact />;

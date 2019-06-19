@@ -2,50 +2,59 @@ import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
-const Contact = props => {
-  const {
-    orderBarContainer,
-    orderBarText,
-    paperStyle,
-    componentsStyle,
-    ulStyle,
-    dividerStyle
-  } = styles;
+const getIngredientsCount = ingredients => {
+  if (ingredients) {
+    return ingredients.length;
+  }
+};
+const getIngredientsText = ingredients => {
+  if (ingredients) {
+    if (ingredients.length == 1) {
+      return "składnikiem";
+    } else {
+      return "składnikami";
+    }
+  }
+};
 
+const renderIngredientList = ingredients => {
+  if (ingredients && ingredients.length > 0) {
+    return ingredients.map(item => {
+      if (item) {
+        return <li>{item.name}</li>;
+      }
+    });
+  }
+};
+const Contact = props => {
+  const { componentsStyle, ulStyle, dividerStyle } = styles;
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
-      <div style={orderBarContainer}>
-        <p style={orderBarText}>Podsumowanie</p>
-      </div>
-      <Paper style={paperStyle}>
-        <p style={{ fontWeight: "bold" }}>Twoje zamówienie:</p>
-        <p style={{ fontWeight: "bold", color: "gold" }}>
-          <span>Pizza z 3-ema składnikami:</span>
-        </p>
-        <div style={dividerStyle} />
-        <ul style={ulStyle}>
-          <li>
-            <p style={componentsStyle}>Szynka</p>
-          </li>
-          <li>
-            <p style={componentsStyle}>Pieczarki</p>
-          </li>
-          <li>
-            <p style={componentsStyle}>Papryka</p>
-          </li>
-          <li>
-            <p style={componentsStyle}>Grubsze ciasto</p>
-          </li>
-        </ul>
-        <div style={dividerStyle} />
-        <p style={{ fontWeight: "bold", color: "red" }}>Koszt dostawy: 2zł</p>
-        <p>Koszt składników pizzy: 25zł</p>
-        <p>Koszty dodatkowe: 2,50zł(grubsze ciasto)</p>
-        <p style={{ fontWeight: "bold" }}>SUMA: 29,50zł</p>
-        <Button variant="contained" color="primary">
-          Zamów
+      <p style={{ fontWeight: "bold", color: "gold" }}>
+        <span>
+          Pizza z {getIngredientsCount(props.ingredients)} {getIngredientsText(props.ingredients)}:
+        </span>
+      </p>
+      <div style={dividerStyle} />
+      <ul style={ulStyle}>{renderIngredientList(props.ingredients)}</ul>
+      <div style={dividerStyle} />
+      <p style={{ fontWeight: "bold", color: "red" }}>Koszt dostawy: 2zł</p>
+      <p>Koszt składników pizzy: 25zł</p>
+      <p>Koszty dodatkowe: 2,50zł(grubsze ciasto)</p>
+      <p style={{ fontWeight: "bold" }}>SUMA: 29,50zł</p>
+      <div style={{ display: "flex", flexDirection: "row" }}>
+        <Button variant="contained" color="secondary" style={{ marginRight: 5 }}>
+          Anuluj
         </Button>
-      </Paper>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginLeft: 5 }}
+          onClick={() => props.confirmHandler()}
+        >
+          Potwierdź
+        </Button>
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
@@ -11,84 +11,49 @@ import Select from "@material-ui/core/Select";
 import Switch from "@material-ui/core/Switch";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Paper from "@material-ui/core/Paper";
+import { Button } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import CancelIcon from "@material-ui/icons/Cancel";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Slide from "@material-ui/core/Slide";
+import Ordering from "./Ordering";
+import firebase from "firebase";
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap"
-  },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
+    minHeight: 20
   },
-  selectEmpty: {
-    marginTop: theme.spacing(2)
+  button: {
+    margin: theme.spacing(1)
   }
 }));
-
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export default function SimpleSelect() {
   const classes = useStyles();
-  const [sizes, setSizes] = React.useState([
-    {
-      id: 1,
-      name: "mała",
-      size: 26,
-      price: 0
-    },
-    {
-      id: 2,
-      name: "średnia",
-      size: 32,
-      price: 5
-    },
-    {
-      id: 3,
-      name: "duża",
-      size: 42,
-      price: 10
-    }
-  ]);
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [sizes, setSizes] = React.useState([]);
   const [selectedSize, setSelectedSize] = React.useState({
     id: 2,
     name: "średnia",
     size: 32,
     price: 5
   });
-  const [ingredients, setIngredients] = React.useState([
-    {
-      id: 1,
-      name: "salami",
-      price: 1.5
-    },
-    {
-      id: 2,
-      name: "ser",
-      price: 1
-    },
-    {
-      id: 3,
-      name: "boczek",
-      price: 2.5
-    },
-    {
-      id: 4,
-      name: "pomidor",
-      price: 0.5
-    },
-    {
-      id: 5,
-      name: "pieczarki",
-      price: 0.5
-    }
-  ]);
-  const [firstIngredient, setFirstIngredient] = React.useState([]);
-  const [secondIngredient, setSecondIngredient] = React.useState([]);
-  const [thirdIngredient, setThirdIngredient] = React.useState([]);
+  const [ingredients, setIngredients] = React.useState([]);
+  const [firstIngredient, setFirstIngredient] = React.useState(null);
+  const [secondIngredient, setSecondIngredient] = React.useState(null);
+  const [thirdIngredient, setThirdIngredient] = React.useState(null);
   const [isThick, setIsThick] = React.useState(false);
 
   const onThicknessChangeHandler = () => {
     setIsThick(!isThick);
-    console.log(isThick);
   };
   const handleChange = (event, ingredientOrder) => {
     switch (ingredientOrder) {
@@ -106,11 +71,25 @@ export default function SimpleSelect() {
   const handleSizeChange = event => {
     setSelectedSize(sizes.find(item => item.id == event.target.value));
   };
+  const handleFirstIngredientCancel = event => {
+    setFirstIngredient(null);
+  };
+  const handleSecondIngredientCancel = event => {
+    setSecondIngredient(null);
+  };
+  const handleThirdIngredientCancel = event => {
+    setThirdIngredient(null);
+  };
+  const orderClickHandler = () => {
+    setIsOpen(!isOpen);
+  };
   const getOrderPrice = () => {
-    var firstIngredientPrice = firstIngredient.price === undefined ? 0 : firstIngredient.price;
-    var secondIngredientPrice = secondIngredient.price === undefined ? 0 : secondIngredient.price;
-    var thirdIngredientPrice = thirdIngredient.price === undefined ? 0 : thirdIngredient.price;
+    const basePrice = 10;
+    var firstIngredientPrice = firstIngredient ? firstIngredient.price : 0;
+    var secondIngredientPrice = secondIngredient ? secondIngredient.price : 0;
+    var thirdIngredientPrice = thirdIngredient ? thirdIngredient.price : 0;
     return (
+      basePrice +
       selectedSize.price +
       (isThick ? 10 : 0) +
       firstIngredientPrice +
@@ -118,104 +97,231 @@ export default function SimpleSelect() {
       thirdIngredientPrice
     );
   };
+
+  // Get a reference to the database service
+  useEffect(() => {
+    const config = {
+      apiKey: "AIzaSyC5LbFjXjISF0W_kMpmQliiOB5RaIg8buo",
+      projectId: "test-992a4",
+      databaseURL: "https://test-992a4.firebaseio.com/",
+      authDomain: "test-992a4.firebaseio.com"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(config);
+    }
+
+    var database = firebase.database();
+    var ingredientsRef = database.ref("/ingredients");
+    ingredientsRef.on("value", snapshot => {
+      const state = snapshot.val();
+      setIngredients(state);
+    });
+    var sizesRef = database.ref("/sizes");
+    sizesRef.on("value", snapshot => {
+      const state = snapshot.val();
+      setSizes(state);
+    });
+  });
+
+  const confirmOrderHandler = () => {
+    console.log("order confirmed!!!");
+    orderClickHandler();
+    var database = firebase.database();
+    var newOrderKey = firebase
+      .database()
+      .ref()
+      .child("orders")
+      .push().key;
+    var ingredientsRef = database.ref("/orders/" + newOrderKey).update({
+      item: {
+        ingredients: [firstIngredient, secondIngredient, thirdIngredient],
+        thickness: isThick,
+        size: selectedSize
+      },
+      userData: {
+        email: "email@email.com",
+        address: "testowy adres",
+        phone: "123123123"
+      }
+    });
+  };
   return (
     <div style={{ margin: "auto", display: "flex", flexDirection: "column" }}>
-      <Paper style={{ width: 500, display: "flex", alignItems: "center", alignSelf: "center" }}>
+      <Dialog
+        open={isOpen}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={orderClickHandler}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">{"Potwierdź zamówienie"}</DialogTitle>
+        <DialogContent style={{ minWidth: 500 }}>
+          <Ordering
+            ingredients={[firstIngredient, secondIngredient, thirdIngredient]}
+            thickness={isThick}
+            size={selectedSize}
+            confirmHandler={confirmOrderHandler}
+          />
+        </DialogContent>
+      </Dialog>
+      <Paper
+        style={{
+          width: 500,
+          display: "flex",
+          alignItems: "center",
+          alignSelf: "center",
+          flexDirection: "column",
+          paddingTop: 30
+        }}
+      >
         <form
           className={classes.root}
           autoComplete="off"
           style={{ display: "flex", flexDirection: "column", width: 250, alignItems: "center" }}
         >
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="size-simple">Rozmiar</InputLabel>
-            <Select
-              value={selectedSize.id}
-              onChange={event => handleSizeChange(event)}
-              inputProps={{
-                name: "size",
-                id: "size-simple"
-              }}
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <FormControl className={classes.formControl}>
+              <InputLabel className={classes.label} htmlFor="size-simple">
+                Rozmiar
+              </InputLabel>
+              <Select
+                value={selectedSize.id}
+                onChange={event => handleSizeChange(event)}
+                inputProps={{
+                  name: "size",
+                  id: "size-simple"
+                }}
+              >
+                {sizes.map(item => {
+                  return (
+                    <MenuItem value={item.id} key={item.id}>
+                      {item.name}({item.size} cm)
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <div />
+          </div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <FormControl className={classes.formControl}>
+              <FormControlLabel
+                className={classes.label}
+                value="top"
+                control={<Switch color="primary" />}
+                label="Grube ciasto?"
+                labelPlacement="start"
+                onChange={onThicknessChangeHandler}
+                checked={isThick}
+              />
+            </FormControl>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="ingredient-simple">Składnik 1</InputLabel>
+              <Select
+                value={firstIngredient ? firstIngredient.id : 0}
+                onChange={event => handleChange(event, 1)}
+                inputProps={{
+                  name: "ingredient",
+                  id: "ingredient-simple"
+                }}
+              >
+                {ingredients.map(item => {
+                  return (
+                    <MenuItem value={item.id} key={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <IconButton
+              onClick={handleFirstIngredientCancel}
+              className={classes.button}
+              aria-label="Cancel"
+              color="secondary"
+              disabled={firstIngredient == null}
             >
-              {sizes.map(item => {
-                return (
-                  <MenuItem value={item.id} key={item.id}>
-                    {item.name}({item.size} cm)
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <FormControlLabel
-              value="top"
-              control={<Switch color="primary" />}
-              label="Grube ciasto?"
-              labelPlacement="start"
-              onChange={onThicknessChangeHandler}
-              checked={isThick}
-            />
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="ingredient-simple">Składnik 1</InputLabel>
-            <Select
-              value={firstIngredient.id}
-              onChange={event => handleChange(event, 1)}
-              inputProps={{
-                name: "ingredient",
-                id: "ingredient-simple"
-              }}
+              <CancelIcon />
+            </IconButton>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="ingredient-simple">Składnik 2</InputLabel>
+              <Select
+                value={secondIngredient ? secondIngredient.id : 0}
+                onChange={event => handleChange(event, 2)}
+                inputProps={{
+                  name: "ingredient",
+                  id: "ingredient-simple"
+                }}
+              >
+                {ingredients.map(item => {
+                  return (
+                    <MenuItem value={item.id} key={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <IconButton
+              onClick={handleSecondIngredientCancel}
+              className={classes.button}
+              aria-label="Cancel"
+              color="secondary"
+              disabled={secondIngredient == null}
             >
-              {ingredients.map(item => {
-                return (
-                  <MenuItem value={item.id} key={item.id}>
-                    {item.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="ingredient-simple">Składnik 2</InputLabel>
-            <Select
-              value={secondIngredient.id}
-              onChange={event => handleChange(event, 2)}
-              inputProps={{
-                name: "ingredient",
-                id: "ingredient-simple"
-              }}
+              <CancelIcon />
+            </IconButton>
+          </div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="ingredient-simple">Składnik 3</InputLabel>
+              <Select
+                value={thirdIngredient ? thirdIngredient.id : 0}
+                onChange={event => handleChange(event, 3)}
+                inputProps={{
+                  name: "ingredient",
+                  id: "ingredient-simple"
+                }}
+              >
+                {ingredients.map(item => {
+                  return (
+                    <MenuItem value={item.id} key={item.id}>
+                      {item.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <IconButton
+              onClick={handleThirdIngredientCancel}
+              className={classes.button}
+              aria-label="Cancel"
+              color="secondary"
+              disabled={thirdIngredient == null}
             >
-              {ingredients.map(item => {
-                return (
-                  <MenuItem value={item.id} key={item.id}>
-                    {item.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="ingredient-simple">Składnik 3</InputLabel>
-            <Select
-              value={thirdIngredient.id}
-              onChange={event => handleChange(event, 3)}
-              inputProps={{
-                name: "ingredient",
-                id: "ingredient-simple"
-              }}
-            >
-              {ingredients.map(item => {
-                return (
-                  <MenuItem value={item.id} key={item.id}>
-                    {item.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
+              <CancelIcon />
+            </IconButton>
+          </div>
         </form>
-        <div>
-          <p>Wartość zamówienia: {getOrderPrice()}</p>
+        <div style={{ width: "100%" }}>
+          <p style={{ textAlign: "right", marginRight: 20, fontSize: 20 }}>
+            Wartość zamówienia: <span style={{ color: "green" }}>{getOrderPrice()} PLN</span>
+          </p>
         </div>
+
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ display: "flex", alignSelf: "flex-end", marginRight: 20, marginBottom: 30 }}
+          onClick={orderClickHandler}
+        >
+          Zamów
+        </Button>
       </Paper>
     </div>
   );

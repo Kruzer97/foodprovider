@@ -7,7 +7,7 @@ const Contact = props => {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
-      <div style={phoneNumberContainer}>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <p style={phoneNumberText}>tel. 606 606 606</p>
       </div>
       <Paper style={paperStyle}>
@@ -60,7 +60,8 @@ const styles = {
   },
   phoneNumberText: {
     fontSize: 50,
-    color: "red"
+    color: "red",
+    margin: 10
   },
   openHoursDayText: {
     margin: 0,
@@ -73,8 +74,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
-    marginTop: 50,
-    padding: 25,
+    marginTop: 10,
     width: 500,
     alignSelf: "center"
   }
