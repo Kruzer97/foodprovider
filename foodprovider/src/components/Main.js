@@ -18,6 +18,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Ordering from "./Ordering";
+import Order from "./Order";
 import Contact from "./Contact";
 
 const drawerWidth = 240;
@@ -71,7 +72,7 @@ function Main(props) {
         return <Ordering />;
 
       case "Ordering":
-        return <Ordering />;
+        return <Order />;
 
       case "Contact":
         return <Contact />;
