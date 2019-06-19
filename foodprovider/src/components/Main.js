@@ -98,21 +98,18 @@ function Main(props) {
       <Divider />
       <List>
         {["Home", "Zamów"].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={text} onClick={index === 0 ? openHomeHandler : openOrderingHandler}>
             <ListItemIcon>{index % 2 === 0 ? <HomeIcon /> : <OrderIcon />}</ListItemIcon>
-            <ListItemText
-              onClick={index === 0 ? openHomeHandler : openOrderingHandler}
-              primary={text}
-            />
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
         {["Kontakt"].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={text} onClick={openContactHandler}>
             <ListItemIcon>{index === 0 ? <PhoneIcon /> : <HomeIcon />}</ListItemIcon>
-            <ListItemText onClick={openContactHandler} primary={text} />
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>

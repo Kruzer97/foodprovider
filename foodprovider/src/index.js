@@ -10,7 +10,7 @@ import Order from "./components/Order";
 import Home from "./components/Home";
 import AllOrders from "./components/AllOrders";
 
-ReactDOM.render(<AllOrders />, document.getElementById("root"));
+ReactDOM.render(<Main />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
