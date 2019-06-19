@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
@@ -21,6 +21,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import Ordering from "./Ordering";
+import Firebase from "firebase/app";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -142,6 +143,14 @@ export default function SimpleSelect() {
       thirdIngredientPrice
     );
   };
+  var config = {
+    databaseURL: "https://test-992a4.firebaseio.com/"
+  };
+  firebase.initializeApp(config);
+
+  // Get a reference to the database service
+  var database = firebase.database();
+  useEffect(() => {});
   return (
     <div style={{ margin: "auto", display: "flex", flexDirection: "column" }}>
       <Dialog
