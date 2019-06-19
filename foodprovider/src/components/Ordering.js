@@ -20,7 +20,6 @@ const getIngredientsText = ingredients => {
 const renderIngredientList = ingredients => {
   if (ingredients && ingredients.length > 0) {
     return ingredients.map(item => {
-      console.log(item);
       if (item) {
         return <li>{item.name}</li>;
       }
@@ -47,7 +46,12 @@ const Contact = props => {
         <Button variant="contained" color="secondary" style={{ marginRight: 5 }}>
           Anuluj
         </Button>
-        <Button variant="contained" color="primary" style={{ marginLeft: 5 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          style={{ marginLeft: 5 }}
+          onClick={() => props.confirmHandler()}
+        >
           Potwierdź
         </Button>
       </div>

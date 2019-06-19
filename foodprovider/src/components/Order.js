@@ -21,7 +21,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import Ordering from "./Ordering";
-import Firebase from "firebase/app";
+import firebase from "firebase";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -39,59 +39,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function SimpleSelect() {
   const classes = useStyles();
   const [isOpen, setIsOpen] = React.useState(false);
-  const [sizes, setSizes] = React.useState([
-    {
-      id: 1,
-      name: "mała",
-      size: 26,
-      price: 0
-    },
-    {
-      id: 2,
-      name: "średnia",
-      size: 32,
-      price: 5
-    },
-    {
-      id: 3,
-      name: "duża",
-      size: 42,
-      price: 10
-    }
-  ]);
+  const [sizes, setSizes] = React.useState([]);
   const [selectedSize, setSelectedSize] = React.useState({
     id: 2,
     name: "średnia",
     size: 32,
     price: 5
   });
-  const [ingredients, setIngredients] = React.useState([
-    {
-      id: 1,
-      name: "salami",
-      price: 1.5
-    },
-    {
-      id: 2,
-      name: "ser",
-      price: 1
-    },
-    {
-      id: 3,
-      name: "boczek",
-      price: 2.5
-    },
-    {
-      id: 4,
-      name: "pomidor",
-      price: 0.5
-    },
-    {
-      id: 5,
-      name: "pieczarki",
-      price: 0.5
-    }
-  ]);
+  const [ingredients, setIngredients] = React.useState([]);
   const [firstIngredient, setFirstIngredient] = React.useState(null);
   const [secondIngredient, setSecondIngredient] = React.useState(null);
   const [thirdIngredient, setThirdIngredient] = React.useState(null);
@@ -99,7 +54,6 @@ export default function SimpleSelect() {
 
   const onThicknessChangeHandler = () => {
     setIsThick(!isThick);
-    console.log(isThick);
   };
   const handleChange = (event, ingredientOrder) => {
     switch (ingredientOrder) {
@@ -143,14 +97,54 @@ export default function SimpleSelect() {
       thirdIngredientPrice
     );
   };
-  var config = {
-    databaseURL: "https://test-992a4.firebaseio.com/"
-  };
-  firebase.initializeApp(config);
 
   // Get a reference to the database service
-  var database = firebase.database();
-  useEffect(() => {});
+  useEffect(() => {
+    const config = {
+      apiKey: "AIzaSyC5LbFjXjISF0W_kMpmQliiOB5RaIg8buo",
+      projectId: "test-992a4",
+      databaseURL: "https://test-992a4.firebaseio.com/",
+      authDomain: "test-992a4.firebaseio.com"
+    };
+    if (!firebase.apps.length) {
+      firebase.initializeApp(config);
+    }
+
+    var database = firebase.database();
+    var ingredientsRef = database.ref("/ingredients");
+    ingredientsRef.on("value", snapshot => {
+      const state = snapshot.val();
+      setIngredients(state);
+    });
+    var sizesRef = database.ref("/sizes");
+    sizesRef.on("value", snapshot => {
+      const state = snapshot.val();
+      setSizes(state);
+    });
+  });
+
+  const confirmOrderHandler = () => {
+    console.log("order confirmed!!!");
+    orderClickHandler();
+    var database = firebase.database();
+    var newOrderKey = firebase
+      .database()
+      .ref()
+      .child("orders")
+      .push().key;
+    var ingredientsRef = database.ref("/orders/" + newOrderKey).update({
+      item: {
+        ingredients: [firstIngredient, secondIngredient, thirdIngredient],
+        thickness: isThick,
+        size: selectedSize
+      },
+      userData: {
+        email: "email@email.com",
+        address: "testowy adres",
+        phone: "123123123"
+      }
+    });
+  };
   return (
     <div style={{ margin: "auto", display: "flex", flexDirection: "column" }}>
       <Dialog
@@ -167,6 +161,7 @@ export default function SimpleSelect() {
             ingredients={[firstIngredient, secondIngredient, thirdIngredient]}
             thickness={isThick}
             size={selectedSize}
+            confirmHandler={confirmOrderHandler}
           />
         </DialogContent>
       </Dialog>
