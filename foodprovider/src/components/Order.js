@@ -102,10 +102,10 @@ export default function SimpleSelect() {
   // Get a reference to the database service
   useEffect(() => {
     const config = {
-      apiKey: "AIzaSyC5LbFjXjISF0W_kMpmQliiOB5RaIg8buo",
-      projectId: "test-992a4",
-      databaseURL: "https://test-992a4.firebaseio.com/",
-      authDomain: "test-992a4.firebaseio.com"
+      apiKey: "AIzaSyBikZr3rZXngQyB9D1jj1nElXXg43IAcCE",
+      projectId: "foodprovider-22a6d",
+      databaseURL: "https://foodprovider-22a6d.firebaseio.com/",
+      authDomain: "foodprovider-22a6d.firebaseio.com"
     };
     if (!firebase.apps.length) {
       firebase.initializeApp(config);
@@ -141,7 +141,8 @@ export default function SimpleSelect() {
         thickness: isThick,
         size: selectedSize
       },
-      userData: { ...address }
+      userData: { ...address },
+      orderDate: new Date()
     });
   };
   return (

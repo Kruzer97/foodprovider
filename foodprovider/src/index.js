@@ -1,14 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
 import * as serviceWorker from "./serviceWorker";
-import Contact from "./components/Contact";
-import Ordering from "./components/Ordering";
 import Main from "./components/Main";
-import Order from "./components/Order";
-import Home from "./components/Home";
-import AllOrders from "./components/AllOrders";
 
 ReactDOM.render(<Main />, document.getElementById("root"));
 

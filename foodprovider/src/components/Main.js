@@ -60,7 +60,7 @@ function Main(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [currentPageName, setCurrentPageName] = React.useState("Ordering");
+  const [currentPageName, setCurrentPageName] = React.useState("Home");
   const [pageTitle, setPageTitle] = React.useState("Home");
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
