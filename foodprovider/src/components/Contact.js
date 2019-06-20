@@ -60,7 +60,7 @@ const styles = {
   },
   phoneNumberText: {
     fontSize: 50,
-    color: "red",
+    color: "#3f51b5",
     margin: 10
   },
   openHoursDayText: {

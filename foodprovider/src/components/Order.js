@@ -22,6 +22,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Slide from "@material-ui/core/Slide";
 import Ordering from "./Ordering";
 import firebase from "firebase";
+import Background from "../images/MainBackground.jpg";
 
 const useStyles = makeStyles(theme => ({
   formControl: {
@@ -144,7 +145,16 @@ export default function SimpleSelect() {
     });
   };
   return (
-    <div style={{ margin: "auto", display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        margin: "auto",
+        display: "flex",
+        flexDirection: "column",
+        backgroundImage: `url(${Background})`,
+        width: "100%",
+        height: "100%"
+      }}
+    >
       <Dialog
         open={isOpen}
         TransitionComponent={Transition}
@@ -172,7 +182,8 @@ export default function SimpleSelect() {
           alignItems: "center",
           alignSelf: "center",
           flexDirection: "column",
-          paddingTop: 30
+          paddingTop: 30,
+          marginTop: 30
         }}
       >
         <form

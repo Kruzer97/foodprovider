@@ -1,12 +1,20 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Pizza from "../images/PizzaHome.jpg";
+import Background from "../images/MainBackground.jpg";
 
 const Home = props => {
   const { mainText, paperStyle } = styles;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "strech",
+        marginBottom: 40
+      }}
+    >
       <img style={{ width: "100%" }} alt="Pizza" src={Pizza} />
       <div>
         <p style={mainText}>Najlepsza pizza w mieście!</p>;
@@ -33,10 +41,12 @@ const Home = props => {
 const styles = {
   mainText: {
     fontSize: 50,
-    color: "red",
+    color: "#3f51b5",
     display: "flex",
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
+    marginTop: 30,
+    marginBottom: 15
   },
   paperStyle: {
     display: "flex",

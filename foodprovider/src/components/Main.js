@@ -86,6 +86,10 @@ function Main(props) {
     setCurrentPageName("Ordering");
     setPageTitle("Zamów");
   };
+  const openHomeHandler = () => {
+    setCurrentPageName("Home");
+    setPageTitle("Home");
+  };
 
   const drawer = (
     <div>
@@ -93,12 +97,9 @@ function Main(props) {
       <Divider />
       <List>
         {["Home", "Zamów"].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={text} onClick={index === 0 ? openHomeHandler : openOrderingHandler}>
             <ListItemIcon>{index % 2 === 0 ? <HomeIcon /> : <OrderIcon />}</ListItemIcon>
-            <ListItemText
-              onClick={index === 0 ? openContactHandler : openOrderingHandler}
-              primary={text}
-            />
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>
@@ -164,7 +165,7 @@ function Main(props) {
           </Drawer>
         </Hidden>
       </nav>
-      <main className={classes.content}>
+      <main style={{ padding: 0 }} className={classes.content}>
         <div className={classes.toolbar} />
         {renderPage()}
       </main>
