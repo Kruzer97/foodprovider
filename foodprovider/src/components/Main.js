@@ -17,7 +17,6 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import Ordering from "./Ordering";
 import Order from "./Order";
 import Contact from "./Contact";
 import Home from "./Home";
@@ -61,7 +60,7 @@ function Main(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [currentPageName, setCurrentPageName] = React.useState("Home");
+  const [currentPageName, setCurrentPageName] = React.useState("Ordering");
   const [pageTitle, setPageTitle] = React.useState("Home");
   function handleDrawerToggle() {
     setMobileOpen(!mobileOpen);
@@ -106,9 +105,9 @@ function Main(props) {
       <Divider />
       <List>
         {["Kontakt"].map((text, index) => (
-          <ListItem button key={text}>
+          <ListItem button key={text} onClick={openContactHandler}>
             <ListItemIcon>{index === 0 ? <PhoneIcon /> : <HomeIcon />}</ListItemIcon>
-            <ListItemText onClick={openContactHandler} primary={text} />
+            <ListItemText primary={text} />
           </ListItem>
         ))}
       </List>

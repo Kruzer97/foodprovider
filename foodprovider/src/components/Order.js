@@ -122,9 +122,11 @@ export default function SimpleSelect() {
       setSizes(state);
     });
   });
-
-  const confirmOrderHandler = () => {
-    console.log("order confirmed!!!");
+  const cancelOrderHandler = () => {
+    orderClickHandler();
+  };
+  const confirmOrderHandler = address => {
+    console.log(address);
     orderClickHandler();
     var database = firebase.database();
     var newOrderKey = firebase
@@ -132,17 +134,13 @@ export default function SimpleSelect() {
       .ref()
       .child("orders")
       .push().key;
-    var ingredientsRef = database.ref("/orders/" + newOrderKey).update({
+    database.ref("/orders/" + newOrderKey).update({
       item: {
         ingredients: [firstIngredient, secondIngredient, thirdIngredient],
         thickness: isThick,
         size: selectedSize
       },
-      userData: {
-        email: "email@email.com",
-        address: "testowy adres",
-        phone: "123123123"
-      }
+      userData: { ...address }
     });
   };
   return (
@@ -156,18 +154,20 @@ export default function SimpleSelect() {
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle id="alert-dialog-slide-title">{"Potwierdź zamówienie"}</DialogTitle>
-        <DialogContent style={{ minWidth: 500 }}>
+        <DialogContent style={{ minWidth: "100%" }}>
           <Ordering
             ingredients={[firstIngredient, secondIngredient, thirdIngredient]}
             thickness={isThick}
             size={selectedSize}
             confirmHandler={confirmOrderHandler}
+            orderPrice={getOrderPrice()}
+            cancelHandler={cancelOrderHandler}
           />
         </DialogContent>
       </Dialog>
       <Paper
         style={{
-          width: 500,
+          width: "80%",
           display: "flex",
           alignItems: "center",
           alignSelf: "center",
