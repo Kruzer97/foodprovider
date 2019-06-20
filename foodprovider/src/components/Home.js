@@ -1,12 +1,20 @@
 import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Pizza from "../images/PizzaHome.jpg";
+import Background from "../images/MainBackground.jpg";
 
 const Home = props => {
   const { mainText, paperStyle } = styles;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "strech" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "strech",
+        marginBottom: 40
+      }}
+    >
       <img style={{ width: "100%" }} alt="Pizza" src={Pizza} />
       <div>
         <p style={mainText}>Najlepsza pizza w mieście!</p>;

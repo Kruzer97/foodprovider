@@ -166,7 +166,7 @@ function Main(props) {
           </Drawer>
         </Hidden>
       </nav>
-      <main className={classes.content}>
+      <main style={{ padding: 0 }} className={classes.content}>
         <div className={classes.toolbar} />
         {renderPage()}
       </main>
